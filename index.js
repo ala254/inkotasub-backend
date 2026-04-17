@@ -16,6 +16,7 @@ app.get("/", (req, res) => {
 
 const axios = require("axios");
 
+// IP ROUTE
 app.get('/ip', async (req, res) => {
   try {
     const response = await axios.get('https://api.ipify.org?format=json');
