@@ -17,13 +17,32 @@ app.get("/", (req, res) => {
 const axios = require("axios");
 
 // IP ROUTE
-app.get('/ip', async (req, res) => {
-  try {
-    const response = await axios.get('https://api.ipify.org?format=json');
-    res.send(response.data.ip);
-  } catch (error) {
-    res.status(500).send("Error fetching IP");
-  }
+app.get('/server-ip', async (req, res) => {
+    try {
+        let serverIp = 'Unable to determine';
+
+        // 1. Check for QuotaGuard static IP first
+        if (process.env.QUOTAGUARD_URL) {
+            const proxyResponse = await axios.get('https://ip.quotaguard.com', {
+                proxy: { host: 'proxy.quotaguard.com', port: 9292 }
+            });
+            serverIp = proxyResponse.data.ip;
+        } 
+        // 2. Fallback to ipify
+        else {
+            const response = await axios.get('https://api.ipify.org?format=json');
+            serverIp = response.data.ip;
+        }
+        
+        res.json({ 
+            ip: serverIp,
+            message: "Add this IP to ClubKonnect whitelist",
+            note: "If using Render without static IP, this may change over time"
+        });
+    } catch (error) {
+        console.error("Error fetching IP:", error.message);
+        res.status(500).json({ error: "Failed to fetch server IP" });
+    }
 });
 
 // BUY AIRTIME
