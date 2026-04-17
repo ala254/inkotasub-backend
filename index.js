@@ -14,6 +14,13 @@ app.get("/", (req, res) => {
   res.send("INKOTASUB BACKEND WORKING 🚀");
 });
 
+app.get('/ip', async (req, res) => {
+  const fetch = (await import('node-fetch')).default;
+  const response = await fetch('https://api.ipify.org');
+  const ip = await response.text();
+  res.send(ip);
+});
+
 // BUY AIRTIME
 app.post("/buy-airtime", async (req, res) => {
   try {
