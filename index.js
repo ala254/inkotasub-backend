@@ -14,11 +14,15 @@ app.get("/", (req, res) => {
   res.send("INKOTASUB BACKEND WORKING 🚀");
 });
 
+const axios = require("axios");
+
 app.get('/ip', async (req, res) => {
-  const fetch = (await import('node-fetch')).default;
-  const response = await fetch('https://api.ipify.org');
-  const ip = await response.text();
-  res.send(ip);
+  try {
+    const response = await axios.get('https://api.ipify.org?format=json');
+    res.send(response.data.ip);
+  } catch (error) {
+    res.status(500).send("Error fetching IP");
+  }
 });
 
 // BUY AIRTIME
