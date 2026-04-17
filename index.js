@@ -14,8 +14,6 @@ app.get("/", (req, res) => {
   res.send("INKOTASUB BACKEND WORKING 🚀");
 });
 
-const axios = require("axios");
-
 // IP ROUTE
 app.get('/server-ip', async (req, res) => {
     try {
@@ -69,7 +67,7 @@ app.post("/buy-airtime", async (req, res) => {
   }
 });
 
-// BUY DATA (example)
+// BUY DATA
 app.post("/buy-data", async (req, res) => {
   try {
     const { network, phone, plan } = req.body;
@@ -96,6 +94,7 @@ app.post("/buy-data", async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
